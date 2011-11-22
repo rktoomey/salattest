@@ -1,0 +1,9 @@
+This project was built to experiment with Scala / MongoDB / Casbah / Salat,
+and attempt to practice inserting, updating, querying, and deleting DB
+records.
+
+dao.update doesn't appear to do anything, but throws no exceptions
+
+explicit connections to "localhost",27017 do a lookup of the local
+hostname instead of finding 127.0.0.1, and thus fail.
+
