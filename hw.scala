@@ -19,16 +19,15 @@ object Hi {
     println("Creating ...")
     val m: Mojo = Mojo(name = "Morris Jones", desc = "astronomer")
     println("Inserting ...")
-    val _id = dao.insert(m).getOrElse("dud!")
+    val _id: ObjectId = dao.insert(m).getOrElse(error("dude, this doesn't compile!"))
     println("ID returned: " + _id)
     println("Updating ...")
-    // No way to tell if this succeeds or not
-    dao.update(MongoDBObject("_id" -> _id), MongoDBObject("desc" -> "bridge player"), 
-      upsert = true, multi = true, wc = coll.writeConcern)
+    // It will throw an exception if the updated failed.  See the source code.
+    dao.update(MongoDBObject("_id" -> _id), m.copy(desc = "bridge player"),
+      upsert = false, multi = false, wc = coll.writeConcern)
     println("Searching ...")
-    val cursor = dao.find(ref = MongoDBObject("_id" -> _id))
-    val results = cursor.toList
-    println("Description should say \"bridge player\": " + results)
+    val m_* = dao.findOneByID(_id).getOrElse(":(")
+    println("Description should say \"bridge player\": %s".format(m_*))
   }
 }
 
